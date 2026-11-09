@@ -14,7 +14,7 @@ with tarfile.open(fileobj=bundle,mode='w:gz',compresslevel=9) as archive:
   info=archive.gettarinfo(str(p),arcname=str(rel));info.uid=info.gid=0;info.uname=info.gname='';info.mtime=0
   with p.open('rb') as f:archive.addfile(info,f)
 data=bundle.getvalue();encoded=base64.b64encode(data).decode();encoded='\n'.join(encoded[i:i+76] for i in range(0,len(encoded),76))
-header='# syntax=docker/dockerfile:1.7\n# ariaatashin 4.11.0 — upload this file as Dockerfile at repository root.\n# Embedded source SHA256: '+hashlib.sha256(data).hexdigest()+'\nFROM alpine:3.22 AS source-bundle\nCOPY <<\'ARIA_SOURCE_411\' /bundle.b64\n'+encoded+'\nARIA_SOURCE_411\nRUN mkdir -p /src && base64 -d /bundle.b64 | tar -xzf - -C /src\n'
+header='# syntax=docker/dockerfile:1.7\n# ariaatashin 4.11.1 — upload this file as Dockerfile at repository root.\n# Embedded source SHA256: '+hashlib.sha256(data).hexdigest()+'\nFROM alpine:3.22 AS source-bundle\nCOPY <<\'ARIA_SOURCE_411\' /bundle.b64\n'+encoded+'\nARIA_SOURCE_411\nRUN mkdir -p /src && base64 -d /bundle.b64 | tar -xzf - -C /src\n'
 lines=[]
 for line in (root/'Dockerfile').read_text().splitlines():
  if line.startswith('COPY ') and '--from=' not in line:
